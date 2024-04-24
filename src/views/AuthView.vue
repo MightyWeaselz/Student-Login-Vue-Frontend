@@ -1,7 +1,7 @@
 <template>
       <header class="header">
         <div class="banner">
-            Student Web App
+            Student Web App Test
         </div>
     </header>
 
