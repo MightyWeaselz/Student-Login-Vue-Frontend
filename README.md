@@ -1,14 +1,12 @@
-# vue-tutorial
+# my own view Login Page
 
-This template should help get you started developing with Vue 3 in Vite.
+This Project enables you to login or register to a service thats running in the backend and manages Students in a Table.
+Full Permission and Security Support, so you otherwise cannot fetch the Student Data nor see The Page where its shown in Vue
 
-## Recommended IDE Setup
+## MY IDE SETUP
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+[VSCode](https://code.visualstudio.com/) + [Tailwind](https://tailwindcss.com/docs/installation)
 
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
 
 ## Project Setup
 
