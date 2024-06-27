@@ -136,7 +136,7 @@
           if(error.response){
               if(error.response.status === 400){
                 warn.value = "Fehler beim Senden der Anfrage bitte gebe die daten richtig ein";
-              }else if(error.response.status === 401){
+              }else if(error.response.status === 401 && warn.value == null){
                 warn.value = "Session ausgelaufen, bitte melde dich erneut an, oder registriere dich erst!"
                 console.log(error);
               }else{
@@ -150,6 +150,7 @@
     }
 
     const registerRequest = async () =>{
+
       await axios.post(`${baseUrl}/auth/register`, {
         firstname: credentials.firstName,
         lastname: credentials.lastName,
@@ -178,7 +179,6 @@
     }
 
     const loginRequest = async () => {
-      alert("war ich hier");
       await axios.post(`${baseUrl}/auth/authenticate`, {
         email: credentials.email,
         password: credentials.passwort
@@ -186,16 +186,17 @@
         .then(function (response){
           sessionStorage.setItem('JWT-Token', response.data.token);
           sessionStorage.setItem(`user`, response.data.firstname);
+          sessionStorage.setItem("hasPermission", true)
           token.value = response.data.token;
           console.log('Erfolgreich angemeldet!', response.data);
 
         }).catch(error => {
           if(error.response){
-              
               if(error.response.status === 400){
                 warn.value = "Fehler beim Senden der Anfrage bitte gebe die daten richtig ein";
               }else if (error.response.status === 401){
-                warn.value = "Du bist nicht authorisiert, gebe die richtigen Anmeldedaten ein"
+                alert("dieser error wurde überschattet?" + error.response.status)
+                warn.value = "Du bist nicht authorisiert, gebe die richtigen Anmeldedaten ein oder Registriere dich"
               }else{
                 warn.value = "Es ist ein Fehler unterlaufen (Server könnte probleme haben)"
               }
@@ -209,6 +210,9 @@
   const onSubmit = async () => {
         warn.value = null;
         loading.value = "Loading..."
+        if (credentials.day.length == 1){
+          credentials.day = "0" + credentials.day
+        }
 
         if(!register.value && (!credentials.email || !credentials.passwort)){
             alert('Please enter email or password')
@@ -235,8 +239,6 @@
           await registerRequest();
         }else{
           await loginRequest();
-          alert(token.value);
-          alert(JSON.stringify(headerConfig));
           await fetchRequest();
           router.push("/students");
     };

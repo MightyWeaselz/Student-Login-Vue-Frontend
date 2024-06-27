@@ -33,7 +33,12 @@ router.beforeEach((to, from) => {
     if(to.path === "/auth" || to.path === "/"){
             return true;
     }else if(to.path === "/students" && from.path === "/auth"){
-        return true;
+        const hasPermission = sessionStorage.getItem("hasPermission");
+        if (hasPermission){
+            return true
+        }else{
+            return false
+        }
     }else{return false;}
 });
 

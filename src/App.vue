@@ -4,6 +4,7 @@ import { onUnmounted } from 'vue';
   onUnmounted( () => {
     localStorage.clear()
     sessionStorage.clear()
+    sessionStorage.setItem("hasPermission", false)
   });
   </script>
 
