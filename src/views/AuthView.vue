@@ -124,10 +124,10 @@
     const headerConfig = {headers: {Authorization: null}};
 
     watch(() => token.value ,(value) => {
-        headerConfig.headers.Authorization = `Bearer ${value}`
+      headerConfig.headers.Authorization = `Bearer ${value}`
     });
 
-    const fetchRequest = async () => {
+    const fetchStudent = async () => {
       await axios.get(`${baseUrl}/student`, headerConfig)
         .then(function (response){  
           console.log('Erfolgreich Daten abgerufen', JSON.stringify(response.data));
@@ -184,10 +184,12 @@
         password: credentials.passwort
       })
         .then(function (response){
-          sessionStorage.setItem('JWT-Token', response.data.token);
-          sessionStorage.setItem(`user`, response.data.firstname);
-          sessionStorage.setItem("hasPermission", true)
+          alert(JSON.stringify(response.data));
           token.value = response.data.token;
+          sessionStorage.setItem("JWT-Token", response.data.token);
+          sessionStorage.setItem("user", response.data.firstname);
+          sessionStorage.setItem("role", response.data.role);
+          sessionStorage.setItem("hasPermission", true);
           console.log('Erfolgreich angemeldet!', response.data);
 
         }).catch(error => {
@@ -195,7 +197,6 @@
               if(error.response.status === 400){
                 warn.value = "Fehler beim Senden der Anfrage bitte gebe die daten richtig ein";
               }else if (error.response.status === 401){
-                alert("dieser error wurde überschattet?" + error.response.status)
                 warn.value = "Du bist nicht authorisiert, gebe die richtigen Anmeldedaten ein oder Registriere dich"
               }else{
                 warn.value = "Es ist ein Fehler unterlaufen (Server könnte probleme haben)"
@@ -210,6 +211,7 @@
   const onSubmit = async () => {
         warn.value = null;
         loading.value = "Loading..."
+
         if (credentials.day.length == 1){
           credentials.day = "0" + credentials.day
         }
@@ -239,8 +241,15 @@
           await registerRequest();
         }else{
           await loginRequest();
-          await fetchRequest();
-          router.push("/students");
+          alert(sessionStorage.getItem('JWT-Token'))
+          alert(sessionStorage.getItem("role"))
+          alert(JSON.stringify(headerConfig))
+          await fetchStudent();
+          if(sessionStorage.getItem("role") == "ADMIN"){
+            router.push("/admin")
+          }else{
+            router.push("/students")
+          }
     };
   }
 </script>
