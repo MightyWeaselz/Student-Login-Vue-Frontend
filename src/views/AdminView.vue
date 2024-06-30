@@ -19,7 +19,7 @@
           <tbody>
             <tr v-for="student in studentData" :key="student.id" class="bg-white">
               <td class="px-6 py-4 whitespace-nowrap border-b border-gray-300">{{ student.email }}</td>
-              <td><button class="del-button" @click="deleteEmail(student.id)">Delete</button></td>
+              <td><button class="del-button" @click="deleteEmailRequest(student.id)">Delete</button></td>
             </tr>
           </tbody>
         </table>
@@ -29,33 +29,31 @@
   
     
   <script setup>
-    import { ref, onMounted } from 'vue';
+    import { ref, onMounted, inject } from 'vue';
     import { useRouter } from 'vue-router';
+    import  axios  from 'axios';
   
     const studentData = ref([]);
     const signedUser = ref("");
     const router = useRouter();
 
-    const deleteRequest = async ()=>{
-      await axios.post(`${baseUrl}/auth/authenticate`, {
-        email: credentials.email,
-        password: credentials.passwort
-      })
+    const baseUrl = inject('baseUrl')
+    const headerConfig= inject('headerConfig')
+    const token = inject('token')
+
+    const deleteEmailRequest = async (id)=>{
+
+      studentData.value = studentData.value.filter(student => student.id !== id);
+
+      await axios.delete(`${baseUrl}/student-control/${id}`, headerConfig)
       .then(function (response){
-          
+        console.log(`Erfolgreich den Studenten gelöscht${response}`);
 
-
-      }).catch(error =>{
-
-
+      }).catch(function (error){
+        console.log(`Es ist ein Fehler passiert:${JSON.stringify(error.response)}`);
 
       })
     }
-    
-
-    const deleteEmail = (id) => {
-      studentData.value = studentData.value.filter(student => student.id !== id);
-    };
   
     onMounted( () => {
         studentData.value = JSON.parse(localStorage.getItem('studentsJSON'));
@@ -65,6 +63,8 @@
     const onSignOut = (() => {
       localStorage.clear();
       sessionStorage.clear();
+      token.value = null
+      headerConfig.headers.Authorization = null
       router.push("/auth");
     })
   </script>

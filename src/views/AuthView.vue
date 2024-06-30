@@ -5,7 +5,6 @@
         </div>
     </header>
 
-
     <div class ="auth-form">
         <div class = "tabs">
             <ul>
@@ -77,12 +76,10 @@
             </div>
         </div>
     </form>
-
-
 </template>
 
 <script setup>
-    import {ref, reactive, computed, watch} from 'vue';
+    import {ref, reactive, computed, watch, inject} from 'vue';
     import axios from 'axios';
     import { useRouter } from 'vue-router';
 
@@ -90,6 +87,11 @@
     const register = ref(false);
     const router = useRouter()
     const loading = ref(null);
+
+  
+    const baseUrl = inject('baseUrl');
+    const token = inject('token')
+    const headerConfig = inject('headerConfig')
 
     const credentials = reactive({
         firstName: "",
@@ -117,11 +119,6 @@
       register.value = false;
       warn.value = null;
     }
-
-
-    const baseUrl = "http://localhost:8080/api/v1";
-    const token = ref(null);
-    const headerConfig = {headers: {Authorization: null}};
 
     watch(() => token.value ,(value) => {
       headerConfig.headers.Authorization = `Bearer ${value}`
@@ -210,7 +207,6 @@
 
   const onSubmit = async () => {
         warn.value = null;
-        loading.value = "Loading..."
 
         if (credentials.day.length == 1){
           credentials.day = "0" + credentials.day
@@ -238,8 +234,10 @@
             return;
         }
         if(register.value){
+          loading.value = "Loading..."
           await registerRequest();
         }else{
+          loading.value = "Loading..."
           await loginRequest();
           alert(sessionStorage.getItem('JWT-Token'))
           alert(sessionStorage.getItem("role"))
@@ -247,7 +245,7 @@
           await fetchStudent();
           if(sessionStorage.getItem("role") == "ADMIN"){
             router.push("/admin")
-          }else{
+          }else if(sessionStorage.getItem("role") == "STUDENT"){
             router.push("/students")
           }
     };

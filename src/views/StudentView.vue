@@ -29,12 +29,15 @@
 
   
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, inject} from 'vue';
   import { useRouter } from 'vue-router';
 
   const studentData = ref([]);
   const signedUser = ref("");
   const router = useRouter();
+  
+  const token = inject('token')
+  const headerConfig = inject('headerConfig')
 
   onMounted( () => {
       studentData.value = JSON.parse(localStorage.getItem('studentsJSON'));
@@ -42,8 +45,11 @@
   });
 
   const onSignOut = (() => {
+
     localStorage.clear();
     sessionStorage.clear();
+    token.value = null
+    headerConfig.headers.Authorization = null
     router.push("/auth");
   })
 </script>
