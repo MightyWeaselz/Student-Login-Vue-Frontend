@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <div class="flex justify-between banner">
-        <label class="text-lg antialiased font-sans font-semibold ml-4" >Welcome  {{ signedUser }}!</label>
+        <label class="text-lg antialiased font-sans font-semibold ml-4" >Welcome  {{ signedUserName }}!</label>
         <label class="">Student Web App</label>
         <button class="router-button2" @click="onSignOut"> Abmelden</button>
     </div>
@@ -12,14 +12,16 @@
       <table class="table-auto rounded-lg overflow-hidden shadow-lg">
         <thead class="bg-gray-200">
           <tr>
-            <th class="px-6 py-3 border-b border-gray-300">Name</th>
-            <th class="px-6 py-3 border-b border-gray-300">E-Mail</th>
+            <th :class="tableHeadClass">Vorname</th>
+            <th :class="tableHeadClass">Nachname</th>
+            <th :class="tableHeadClass">E-Mail</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="student in studentData" :key="student.id" class="bg-white">
-            <td class="px-6 py-4 whitespace-nowrap border-b border-gray-300">{{ student.firstname }}</td>
-            <td class="px-6 py-4 whitespace-nowrap border-b border-gray-300">{{ student.email }}</td>
+            <td :class="tupelClass(student)">{{ student.firstname }}</td>
+            <td :class="tupelClass(student)">{{ student.lastname }}</td>
+            <td :class="tupelClass(student)">{{ student.email }}</td>
           </tr>
         </tbody>
       </table>
@@ -34,14 +36,33 @@
 
   const studentData = ref([]);
   const signedUser = ref("");
+  const signedUserName = ref("");
+
   const router = useRouter();
   
   const token = inject('token')
   const headerConfig = inject('headerConfig')
 
+
+  const tableHeadClass = ref("px-6 py-3 border-b border-gray-300");
+
+  const tupelClass = (student) => {
+    if (isSignedUser(student)){
+      return "px-6 py-4 whitespace-nowrap border-b border-gray-300 bg-blue-100"
+    }else{
+      return "px-6 py-4 whitespace-nowrap border-b border-gray-300";
+    }
+  };
+
+  const isSignedUser = (student) => {
+    if (student.email == signedUser.value){
+      return true
+    }else{false}};
+
   onMounted( () => {
       studentData.value = JSON.parse(localStorage.getItem('studentsJSON'));
-      signedUser.value = sessionStorage.getItem('user');
+      signedUser.value = sessionStorage.getItem('email');
+      signedUserName.value = sessionStorage.getItem('user');
   });
 
   const onSignOut = (() => {

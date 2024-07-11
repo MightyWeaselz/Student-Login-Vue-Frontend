@@ -35,19 +35,19 @@ const router = createRouter({
     routes
 });
 
-router.beforeEach((to, from) => {
-    if(to.path === "/auth" || to.path === "/" || to.path === "/admin"){
-            return true;
-    }else if(to.path === "/students"){ 
-        const hasPermission = sessionStorage.getItem("hasPermission");
-        alert("has permission?" + hasPermission)
-        if (hasPermission){
-            return true
-        }else{
-            return false
-        }
-    }else{return false;}
-});
+// router.beforeEach((to, from) => {
+//     if(to.path === "/auth" || to.path === "/" || to.path === "/admin"){
+//             return true;
+//     }else if(to.path === "/students"){ 
+//         const hasPermission = sessionStorage.getItem("hasPermission");
+//         alert("has permission?" + hasPermission)
+//         if (hasPermission){
+//             return true
+//         }else{
+//             return false
+//         }
+//     }else{return false;}
+// });
 
 
 

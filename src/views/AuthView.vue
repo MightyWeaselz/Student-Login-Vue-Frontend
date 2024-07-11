@@ -185,6 +185,7 @@
           token.value = response.data.token;
           sessionStorage.setItem("JWT-Token", response.data.token);
           sessionStorage.setItem("user", response.data.firstname);
+          sessionStorage.setItem("email", response.data.email);
           sessionStorage.setItem("role", response.data.role);
           sessionStorage.setItem("hasPermission", true);
           console.log('Erfolgreich angemeldet!', response.data);
@@ -239,11 +240,8 @@
         }else{
           loading.value = "Loading..."
           await loginRequest();
-          alert(sessionStorage.getItem('JWT-Token'))
-          alert(sessionStorage.getItem("role"))
-          alert(JSON.stringify(headerConfig))
           await fetchStudent();
-          if(sessionStorage.getItem("role") == "ADMIN"){
+          if(sessionStorage.getItem("role") == "PROFESSOR"){
             router.push("/admin")
           }else if(sessionStorage.getItem("role") == "STUDENT"){
             router.push("/students")

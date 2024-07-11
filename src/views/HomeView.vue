@@ -7,7 +7,7 @@
     </header>
 
     <div class="introduction">
-        <h3>
+        <h3 class="h3">
             Willkommen zu meiner kleinen WebApp, <br>
             wo ich Studenten Registrieren, Anmelden und mit einer Datenbank verwalten kann, <br>
             bitte klicke auf Weiter, um dich Anzumelden oder zu Registrieren!
@@ -33,9 +33,22 @@
         text-align: center;
     }
 
-    h3 {
+
+    .h3 {
         font-size: 18px; /* Wähle die Schriftgröße */
         font-family: Arial, sans-serif; /* Wähle eine Schriftart */
+    }
+
+    .h2 {
+        font-size: 22px; /* Wähle die Schriftgröße */
+        font-family: Arial, sans-serif; /* Wähle eine Schriftart */
+        font: bold
+    }
+
+    .p {
+        font-size: 16px; /* Wähle die Schriftgröße */
+        font-family: sans-serif; /* Wähle eine Schriftart */
+        font: bold
     }
 
     .introduction {
