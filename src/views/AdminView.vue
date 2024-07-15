@@ -44,7 +44,7 @@
   
     
   <script setup>
-    import { ref, onMounted, inject, computed } from 'vue';
+    import { ref, onMounted, inject, computed} from 'vue';
     import { useRouter } from 'vue-router';
     import  axios  from 'axios';
     import Popup from "./Popup.vue";
@@ -75,7 +75,9 @@
       "Rolle erfolgreich geändert",
       "Rolle eines Admins kann nicht geändert werden",
       "Du kannst Admins nicht löschen",
-      "Student erfolgreich gelöscht"
+      "Student erfolgreich gelöscht",
+      "Bitte melde dich erneut an, deine Session ist abgelaufen!",
+      "Server antwortet nicht mehr, bitte versuche es später nochmal"
     ]);
     const currentLabelsIndex = ref(0);
 
@@ -114,8 +116,16 @@
 
       }).catch(function (error){
         console.log(`Es ist ein Fehler passiert:${JSON.stringify(error.response)}`);
-          currentLabelsIndex.value = 3;
-          isError.value = true;
+        isError.value = true;
+        if(error.response){
+          if(error.response.status == 401){
+            currentLabelsIndex.value = 5;
+          }else{
+            currentLabelsIndex.value = 3;
+          }
+        }else if(error.request){
+            currentLabelsIndex.value = 6;
+        }
       })};
 
 
@@ -136,9 +146,17 @@
         console.log(`Erfolgreich die Rolle des Studenten ${getUserFromId(id)} zu Professor geändert: ${JSON.stringify(response)}`)
 
       }).catch(function (error){
-        currentLabelsIndex.value = 2;
-        isError.value = true;
         console.log(`Leider ist ein fehler beim ändern der Rolle vorgefallen: ${JSON.stringify(error.response)}`)
+        isError.value = true;
+        if(error.response){
+          if(error.response.status == 401){
+            currentLabelsIndex.value = 5;
+          }else{
+            currentLabelsIndex.value = 2;
+          }
+        }else if(error.request){
+            currentLabelsIndex.value = 6;
+        }
       })
     };
 
@@ -163,11 +181,6 @@
             return true
           }else{false}};
 
-    const getRoleFromUser = (username) => {
-      for(const student of studentData.value){
-        if(student.firstname == username){
-          return student.role
-        }}};
 
     const popupTriggers = ref(false);
 
@@ -175,13 +188,28 @@
       popupTriggers.value = !popupTriggers.value
     }
 
-  
+    const checkToken = async() =>{
+      axios.get(`${baseUrl}/student-control`, headerConfig)
+      .then(function (response){
+        console.log(`Token noch up to Date: ${JSON.stringify(response)}`)
+      }).catch(function(error){
+
+        console.log(`Session abgelaufen, muss erneut angemeldet werdenn: ${JSON.stringify(error.response)}`);
+        alert("Neu Anmelden bitte");
+        onSignOut();
+      })
+    }
+
+
     onMounted(() => {
+        token.value = sessionStorage.getItem("JWT-Token")
+        headerConfig.headers.Authorization = `Bearer ${token.value}`
+        checkToken();
         studentData.value = JSON.parse(localStorage.getItem('studentsJSON'));
         signedUser.value = sessionStorage.getItem("email");
         signedUserName.value = sessionStorage.getItem("user");
-
     });
+
   
     const onSignOut = (() => {
       localStorage.clear();
@@ -233,13 +261,22 @@
         cursor: pointer;
       }
 
+      .router-button2:hover {
+        border-color: #071e24; /* Hintergrundfarbe bei Hover anpassen */
+      }
+
       .del-button {
         width: 100%;
-        padding: 10px;
+        padding: 3px;
         background-color: #4992e0;
         color: #fff;
-        border: none;
-        border-radius: 4px;
+        border-radius: 2px;
         cursor: pointer;
+        border: 3px solid #ffffff; /* Randfarbe anpassen */
       }
+
+      .del-button:hover {
+        border-color: #071e24; /* Hintergrundfarbe bei Hover anpassen */
+      }
+
   </style>

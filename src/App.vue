@@ -1,5 +1,5 @@
 <script setup>
-import { onUnmounted, ref, provide } from 'vue';
+import { onUnmounted, ref, provide, watch } from 'vue';
 
   onUnmounted( () => {
     localStorage.clear()
@@ -10,6 +10,11 @@ import { onUnmounted, ref, provide } from 'vue';
   const token = ref(null);
   const headerConfig = {headers: {Authorization:  null} }
   const baseUrl = "http://localhost:8080/api/v1";
+
+  watch(() => token.value ,(value) => {
+      	alert("headerConfig wird gechanged")
+      headerConfig.headers.Authorization = `Bearer ${value}`
+    });
 
   provide('token', token);
   provide('headerConfig', headerConfig);

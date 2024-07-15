@@ -120,9 +120,9 @@
       warn.value = null;
     }
 
-    watch(() => token.value ,(value) => {
-      headerConfig.headers.Authorization = `Bearer ${value}`
-    });
+    // watch(() => token.value ,(value) => {
+    //   headerConfig.headers.Authorization = `Bearer ${value}`
+    // });
 
     const fetchStudent = async () => {
       await axios.get(`${baseUrl}/student`, headerConfig)
@@ -187,7 +187,6 @@
           sessionStorage.setItem("user", response.data.firstname);
           sessionStorage.setItem("email", response.data.email);
           sessionStorage.setItem("role", response.data.role);
-          sessionStorage.setItem("hasPermission", true);
           console.log('Erfolgreich angemeldet!', response.data);
 
         }).catch(error => {
@@ -211,6 +210,10 @@
 
         if (credentials.day.length == 1){
           credentials.day = "0" + credentials.day
+        }
+
+        if (credentials.month.length == 1){
+          credentials.month = "0" + credentials.month
         }
 
         if(!register.value && (!credentials.email || !credentials.passwort)){
@@ -242,8 +245,10 @@
           await loginRequest();
           await fetchStudent();
           if(sessionStorage.getItem("role") == "PROFESSOR"){
+            sessionStorage.setItem("adminPermission", true);
             router.push("/admin")
           }else if(sessionStorage.getItem("role") == "STUDENT"){
+            sessionStorage.setItem("studentPermission", true);
             router.push("/students")
           }
     };
