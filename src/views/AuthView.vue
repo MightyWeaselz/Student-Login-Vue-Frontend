@@ -139,9 +139,6 @@
               }else{
                 console.log(error);
               }
-          }else if(error.request){
-            warn.value = "Server nicht erreichbar"
-            console.error('Server nicht erreichbar', error);
           }
         })
     }
