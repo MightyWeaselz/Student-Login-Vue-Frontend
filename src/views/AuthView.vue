@@ -25,14 +25,14 @@
                 <div class="title">{{ formTitle }}</div>
 
                 <div class="field" v-if="register">
-                    <label class="label">firstName</label>
+                    <label class="label">First Name</label>
                     <div class="control">
                         <input class="input" type="name" placeholder="FirstName" v-model="credentials.firstName">
                     </div>
                 </div>
 
                 <div class="field" v-if="register">
-                    <label class="label">lastName</label>
+                    <label class="label">Last Name</label>
                     <div class="control">
                         <input class="input" type="name" placeholder="LastName" v-model="credentials.lastName">
                     </div>

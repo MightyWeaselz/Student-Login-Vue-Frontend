@@ -33,6 +33,7 @@
 <script setup>
   import { ref, onMounted, inject} from 'vue';
   import { useRouter } from 'vue-router';
+  import  axios  from 'axios';
 
   const studentData = ref([]);
   const signedUser = ref("");
@@ -42,6 +43,7 @@
   
   const token = inject('token')
   const headerConfig = inject('headerConfig')
+  const baseUrl = inject('baseUrl')
 
 
   const tableHeadClass = ref("px-6 py-3 border-b border-gray-300");
@@ -60,13 +62,28 @@
     }else{false}};
 
   onMounted( () => {
+      token.value = sessionStorage.getItem("JWT-Token")
+      headerConfig.headers.Authorization = `Bearer ${token.value}`
+      alert(JSON.stringify(headerConfig))
+      checkToken();
       studentData.value = JSON.parse(localStorage.getItem('studentsJSON'));
       signedUser.value = sessionStorage.getItem('email');
       signedUserName.value = sessionStorage.getItem('user');
   });
 
-  const onSignOut = (() => {
+  const checkToken = async() =>{
+      axios.get(`${baseUrl}/student`, headerConfig)
+      .then(function (response){
+        console.log(`Token noch up to Date: ${JSON.stringify(response)}`)
+      }).catch(function(error){
 
+        console.log(`Session abgelaufen, muss erneut angemeldet werdenn: ${JSON.stringify(error.response)}`);
+        alert("Neu Anmelden bitte");
+        onSignOut();
+      })
+    }
+
+  const onSignOut = (() => {
     localStorage.clear();
     sessionStorage.clear();
     token.value = null
