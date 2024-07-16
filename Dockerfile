@@ -19,7 +19,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE 80
 
 # Start Server
-CMD ["http-server", "dist"]
+CMD ["http-server", "dist", "-p", "80"]

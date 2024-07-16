@@ -173,6 +173,7 @@
     }
 
     const loginRequest = async () => {
+      // alert(baseUrl);
       await axios.post(`${baseUrl}/auth/authenticate`, {
         email: credentials.email,
         password: credentials.passwort
