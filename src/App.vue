@@ -9,7 +9,7 @@ import { onUnmounted, ref, provide, watch } from 'vue';
 
   const token = ref(null);
   const headerConfig = {headers: {Authorization:  null} }
-  const baseUrl = "http://localhost:8080/api/v1";
+  const baseUrl = process.env.VUE_APP_BASE_URL;
 
   watch(() => token.value ,(value) => {
       	alert("headerConfig wird gechanged")
