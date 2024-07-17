@@ -144,7 +144,7 @@
     }
 
     const registerRequest = async () =>{
-
+      alert(baseUrl);
       await axios.post(`${baseUrl}/auth/register`, {
         firstname: credentials.firstName,
         lastname: credentials.lastName,
@@ -162,6 +162,9 @@
               
             if(error.response.status === 400){
               warn.value = "Fehler beim Senden der Anfrage bitte gebe die daten richtig ein";
+            }
+            if(error.response.status === 405){
+                console.log(error)
             }else{
               warn.value = "Genereller Server fehler"
             }
@@ -173,7 +176,6 @@
     }
 
     const loginRequest = async () => {
-      // alert(baseUrl);
       await axios.post(`${baseUrl}/auth/authenticate`, {
         email: credentials.email,
         password: credentials.passwort
@@ -195,6 +197,7 @@
                 warn.value = "Du bist nicht authorisiert, gebe die richtigen Anmeldedaten ein oder Registriere dich"
               }else{
                 warn.value = "Es ist ein Fehler unterlaufen (Server könnte probleme haben)"
+                console.log(error)
               }
             }else if(error.request){
               warn.value = "Server nicht erreichbar"
