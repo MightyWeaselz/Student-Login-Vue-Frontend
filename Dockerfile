@@ -1,25 +1,14 @@
-# Build-Phase
-FROM node:lts-alpine
 
-# install simple http server for serving static content
-RUN npm install -g http-server
-
-# Set the working directory
+FROM node:lts-alpine as build-stage
 WORKDIR /app
-
-# Copy the package.json and package-lock.json
 COPY package*.json ./
-
-# Install dependencies
 RUN npm install
-
-# Copy the rest of the application code
 COPY . .
-
-# Build the application
 RUN npm run build
 
-EXPOSE 80
 
-# Start Server
-CMD ["http-server", "dist", "-p", "80"]
+#Production-Stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
