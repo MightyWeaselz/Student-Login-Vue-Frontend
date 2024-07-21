@@ -11,7 +11,6 @@ import { onUnmounted, ref, provide, watch } from 'vue';
   const headerConfig = {headers: {Authorization:  null} }
   const baseUrl = "http://localhost:8090/api/v1";
   // const dockerUrl = "http://spring-app:8090/api/v1";
-  // const localUrl = "http://localhost:8090/api/v1";
 
   watch(() => token.value ,(value) => {
       	alert("headerConfig wird gechanged")
