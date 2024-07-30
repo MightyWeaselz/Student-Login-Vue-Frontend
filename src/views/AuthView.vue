@@ -144,7 +144,6 @@
     }
 
     const registerRequest = async () =>{
-      alert(baseUrl);
       await axios.post(`${baseUrl}/auth/register`, {
         firstname: credentials.firstName,
         lastname: credentials.lastName,
@@ -181,7 +180,6 @@
         password: credentials.passwort
       })
         .then(function (response){
-          alert(JSON.stringify(response.data));
           token.value = response.data.token;
           sessionStorage.setItem("JWT-Token", response.data.token);
           sessionStorage.setItem("user", response.data.firstname);

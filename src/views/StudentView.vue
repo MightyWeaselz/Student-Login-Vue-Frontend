@@ -64,7 +64,6 @@
   onMounted( () => {
       token.value = sessionStorage.getItem("JWT-Token")
       headerConfig.headers.Authorization = `Bearer ${token.value}`
-      alert(JSON.stringify(headerConfig))
       checkToken();
       studentData.value = JSON.parse(localStorage.getItem('studentsJSON'));
       signedUser.value = sessionStorage.getItem('email');

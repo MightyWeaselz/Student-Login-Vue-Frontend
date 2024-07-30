@@ -141,7 +141,6 @@
       .then(function (response){
         currentLabelsIndex.value = 1;
         isError.value = false;
-        alert("wir gehen in changeRoleLabel rein")
         changeRoleLabel(id)
         console.log(`Erfolgreich die Rolle des Studenten ${getUserFromId(id)} zu Professor geändert: ${JSON.stringify(response)}`)
 
@@ -167,7 +166,6 @@
         }
       }
       localStorage.setItem("studentsJSON", JSON.stringify(studentData.value))
-      alert("changeRoleLabel ganz ausgeführt!")
     };
 
     const getUserFromId = (id) => {
