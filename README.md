@@ -1,4 +1,4 @@
-# my own view Login Page
+# My own vue Login Page
 
 This Project enables you to login or register to a service thats running in the backend and manages Students in a Table.
 Full Permission and Security Support, so you otherwise cannot fetch the Student Data nor see The Page where its shown in Vue
